@@ -1,9 +1,9 @@
 <!-- בס׳ד -->
 <template>
 
-    <SidebarNav>
+   
         <h1>Secondary Banner</h1>
-    </SidebarNav>
+    
 
 
 </template>

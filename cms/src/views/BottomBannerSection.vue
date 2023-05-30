@@ -1,11 +1,5 @@
-<!-- בס׳ד -->
 <template>
-
-    <SidebarNav>
-        <h1>Bottom Banner</h1>
-    </SidebarNav>
-
-
+    <h1>Bottom Banner</h1>
 </template>
 
 <script setup>

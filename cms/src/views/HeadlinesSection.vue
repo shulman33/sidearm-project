@@ -1,9 +1,9 @@
 <!-- בס׳ד -->
 <template>
 
-    <SidebarNav>
-        <h1>headlinesr</h1>
-    </SidebarNav>
+    
+        <h1>headlines</h1>
+    
 
 
 </template>
