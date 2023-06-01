@@ -14,7 +14,10 @@
             :label="title"
         ></v-text-field>
 
-        <v-btn type="submit" @click="editTitles" color="#26547C" block class="mt-2 custom-button">Edit</v-btn>
+        <v-btn type="submit" @click="editTitles" :color="editColor" block class="mt-2 custom-button">
+          Edit
+          <v-icon right>{{ editIcon }}</v-icon>
+        </v-btn>
       </v-form>
     </v-sheet>
 
@@ -30,7 +33,10 @@
       color="#26547C"
       :key="'checkbox-' + index"
     ></v-checkbox>
-    <v-btn type="submit" @click="deleteTitles" color="#FF3333" block class="mt-2 custom-button">Delete</v-btn>
+    <v-btn type="submit" @click="deleteTitles" :color="deleteColor" block class="mt-2 custom-button">
+      Delete
+      <v-icon right>{{ deleteIcon }}</v-icon>
+    </v-btn>
   </v-sheet>
   </div>
   <v-sheet 
@@ -43,7 +49,10 @@
           v-model="addTitleValue"
           label="Add Title"
         ></v-text-field>
-        <v-btn type="submit" @click="addTitle" color="#26547C" block class="mt-2 custom-button">Add Title</v-btn>
+        <v-btn type="submit" @click="addTitle" :color="addColor" block class="mt-2 custom-button">
+          Add Title
+          <v-icon right>{{ addIcon }}</v-icon>
+        </v-btn>
       </v-form>
     </v-sheet>
 </template>
@@ -55,9 +64,15 @@ import { getSection, addSection, deleteSection } from '../API/endpoints'
 
 const appbarTitles = ref({});
 const checkboxStates = ref([]);
-const succesfullEdit = ref(false)
-const succesfullAdd = ref(false)
-const sucessfullDelete = ref(false)
+
+const editColor = ref('#26547C');
+const editIcon = ref('');
+
+const deleteColor = ref('#26547C');
+const deleteIcon = ref('');
+
+const addColor = ref('#26547C');
+const addIcon = ref('');
 
 const addTitleValue = ref('')
 
@@ -65,6 +80,7 @@ const addTitle = async () => {
   const keys = Object.keys(appbarTitles.value);
 
   // Extract numbers from the keys and find the maximum.
+  // Ensures an added title will have a unique number.
   const maxNumber = keys.reduce((max, key) => {
     const number = parseInt(key.replace('title', ''), 10);
     return Math.max(max, number);
@@ -79,7 +95,19 @@ const addTitle = async () => {
     [`title${titleNumber}`]: addTitleValue.value
   };
 
-  await addSection('homepageSections.appBar/titles', data);
+  try {
+    await addSection('homepageSections.appBar/titles', data);
+    addColor.value = '#4CAF50';
+    addIcon.value = 'mdi-check';
+  } catch (error) {
+    console.error(error);
+    addColor.value = '#FF3333';
+    addIcon.value = 'mdi-close';
+  }
+  setTimeout(() => {
+    addColor.value = '#26547C';
+    addIcon.value = '';
+  }, 3000);
 
   // reload the data
   const sectionData = await getSection('app-bar');
@@ -87,13 +115,24 @@ const addTitle = async () => {
 }
 
 const deleteTitles = async () => {
-  // Iterate over the checkboxStates
-  for (const [index, isChecked] of checkboxStates.value.entries()) {
-    if (isChecked) {
+  try {
+    for (const [index, isChecked] of checkboxStates.value.entries()) {
+      if (isChecked) {
       const titleKey = appbarTitleKeys.value[index];
       await deleteSection('homepageSections.appBar.titles/' + titleKey);
+      }
     }
+    deleteColor.value = '#4CAF50';
+    deleteIcon.value = 'mdi-check';
+  } catch (error) {
+    console.error(error);
+    deleteColor.value = '#FF3333';
+    deleteIcon.value = 'mdi-close';
   }
+  setTimeout(() => {
+    deleteColor.value = '#26547C';
+    deleteIcon.value = '';
+  }, 3000);
 
   // reload the data
   const sectionData = await getSection('app-bar');
@@ -104,7 +143,19 @@ const deleteTitles = async () => {
 };
 
 const editTitles = async () => {
-  await addSection('homepageSections.appBar/titles', appbarTitles.value)
+  try {
+    await addSection('homepageSections.appBar/titles', appbarTitles.value);
+    editColor.value = '#4CAF50';
+    editIcon.value = 'mdi-check';
+  } catch (error) {
+    console.error(error);
+    editColor.value = '#FF3333';
+    editIcon.value = 'mdi-close';
+  }
+  setTimeout(() => {
+    editColor.value = '#26547C';
+    editIcon.value = '';
+  }, 3000);
 
   // reload the data
   const sectionData = await getSection('app-bar');

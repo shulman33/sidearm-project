@@ -1,5 +1,22 @@
 <template>
+  <v-app-bar
+        color="#26547C"
+        prominent
+      >
+        <v-app-bar-nav-icon color="white" variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+        <v-toolbar-title style="color: white">YU CMS</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-btn variant="text" color="white" icon="mdi-magnify"></v-btn>
+
+        <v-btn variant="text" color="white" icon="mdi-filter"></v-btn>
+
+        <v-btn variant="text" color="white" icon="mdi-dots-vertical"></v-btn>
+      </v-app-bar>
     <v-navigation-drawer
+    v-model="drawer"
       color="#26547C"
       theme="dark"
     >
