@@ -6,7 +6,7 @@
       :elevation="6"
       color="#F8F8FF"
     >
-      <v-form @submit.prevent>
+      <v-form >
         <v-text-field
           v-for="(title, index) in appbarTitles"
             :key="index"
@@ -49,8 +49,8 @@
 
 
 <script setup>
-import { ref, onMounted, computed} from 'vue'
-import { patchField, getSection, addSection } from '../API/endpoints'
+import { ref, onMounted } from 'vue'
+import { getSection, addSection, deleteSection } from '../API/endpoints'
 
 const appbarTitles = ref({});
 const newTitles = ref([])
@@ -61,29 +61,36 @@ const sucessfullDelete = ref(false)
 const addTitleValue = ref('')
 
 const addTitle = async () => {
-  const titleNumber = Object.keys(appbarTitles.value).length + 1;
+  const keys = Object.keys(appbarTitles.value);
+
+  // Extract numbers from the keys and find the maximum.
+  const maxNumber = keys.reduce((max, key) => {
+    const number = parseInt(key.replace('title', ''), 10);
+    return Math.max(max, number);
+  }, 0);
+
+  const titleNumber = maxNumber + 1;
+  
+  console.log("keys", keys);
+  console.log("titleNumber", titleNumber);
+
   const data = {
     [`title${titleNumber}`]: addTitleValue.value
-  }
-  await addSection('homepageSections.appBar/titles', data)
+  };
+
+  await addSection('homepageSections.appBar/titles', data);
 }
+
 
 const editTitles = async () => {
-  const data = newTitles.value.reduce((result, title, index) => {
-    if (title !== '') {
-      result[`title${index + 1}`] = title;
-    }
-    return result;
-  }, {});
-  await addSection('homepageSections.appBar/titles', data)
+  await addSection('homepageSections.appBar/titles', appbarTitles.value)
 }
-
-
 
 onMounted(async () => {
   const sectionData = await getSection('app-bar')
   appbarTitles.value = sectionData.titles
-  console.log(appbarTitles.value)
+  console.log("--------------------")
+  console.log(JSON.stringify(appbarTitles.value))
 })
 
 
