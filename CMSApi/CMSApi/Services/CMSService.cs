@@ -73,9 +73,11 @@ namespace CMSApi.Services
             }
         }
 
-   
-
-
+        public async Task DeleteFieldAsync(string id, string documentName, string fieldName)
+        {
+            var updateDefinition = Builders<Client>.Update.Unset($"{documentName}.{fieldName}");
+            await _cmsCollection.UpdateOneAsync(client => client.Id == id, updateDefinition);
+        }
 
 
         public async Task CreateAsync(Client client) =>
@@ -87,7 +89,6 @@ namespace CMSApi.Services
         public async Task RemoveAsync(string id) =>
         await _cmsCollection.DeleteOneAsync(x => x.Id == id);
 
-      
     }
 }
 

@@ -105,6 +105,22 @@ namespace CMSApi.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id:length(24)}/{documentName}/{fieldName}")]
+        public async Task<IActionResult> DeleteField(string id, string documentName, string fieldName)
+        {
+            var client = await _cmsService.GetAsync(id);
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            await _cmsService.DeleteFieldAsync(id, documentName, fieldName);
+
+            return NoContent();
+        }
+
+
 
 
     }

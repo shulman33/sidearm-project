@@ -6,7 +6,7 @@ import SidebarNav from './components/SidebarNav.vue'
 <template >
   <v-app >
     <SidebarNav />
-    <v-main >
+    <v-main style="background-color: #DCDCDC;">
       <RouterView />
     </v-main>
   </v-app>
