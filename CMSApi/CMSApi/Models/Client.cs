@@ -33,7 +33,7 @@ namespace CMSApi.Models
         public BottomBanner bottomBanner { get; set; }
 
         [BsonElement("slideshow")]
-        public SlideShow slideShow { get; set; }
+        public Dictionary<string, string> slideShow { get; set; }
 
         
         public SecondaryBanner secondaryBanner { get; set; }

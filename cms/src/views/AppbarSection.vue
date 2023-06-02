@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="flex-container">
     <v-sheet 
       class="mt-14"
@@ -55,6 +55,82 @@
         </v-btn>
       </v-form>
     </v-sheet>
+</template> -->
+
+<template>
+  <div class="d-flex flex-column align-center justify-center">
+    <div class="d-flex justify-center align-center">
+      <v-sheet
+        class="mt-14"
+        width="400"
+        :elevation="6"
+        color="#F8F8FF"
+      >
+          <v-form @submit.prevent>
+            <v-container>
+              <v-row justify="center" v-for="(title, index) in appbarTitles" :key="index">
+                  <v-col cols="12" sm="12">
+                      <v-text-field
+                      v-model="appbarTitles[index]"
+                      :label="title"
+                      ></v-text-field>
+                  </v-col>
+              </v-row>
+              <v-btn type="submit" @click="editTitles" :color="editColor" block class="mt-2 custom-button">
+                  Edit
+                  <v-icon right>{{ editIcon }}</v-icon>
+              </v-btn>
+            </v-container>
+          </v-form>
+        </v-sheet>
+
+        <v-sheet
+        class="mt-14 ml-16 content-width"
+        :elevation="6"
+        color="#F8F8FF"
+      >
+          <v-container>
+            <v-checkbox
+              v-for="(title, index) in appbarTitleArray"
+              v-model="checkboxStates[index]"
+              :label="title"
+              color="#26547C"
+              :key="'checkbox-' + index"
+            ></v-checkbox>
+              <v-btn type="submit" @click="deleteTitles" :color="deleteColor" block class="mt-2 custom-button">
+                Delete
+                <v-icon right>{{ deleteIcon }}</v-icon>
+              </v-btn>
+          </v-container>
+      </v-sheet>
+    </div>
+
+    <v-sheet
+      class="mt-14"
+      width="800"
+      :elevation="6"
+      color="#F8F8FF"
+    >
+
+        <v-form @submit.prevent>
+          <v-container>
+            <v-row justify="center">
+                <v-col cols="12" sm="12">
+                    <v-text-field
+                    v-model="addTitleValue"
+                    label="Add Title"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-btn type="submit" @click="addTitle" :color="addColor" block class="mt-2 custom-button">
+                Add Title
+                <v-icon right>{{ addIcon }}</v-icon>
+            </v-btn>
+          </v-container>
+          </v-form>
+
+      </v-sheet>
+  </div>
 </template>
 
 
@@ -182,12 +258,25 @@ const appbarTitleKeys = computed(() => Object.keys(appbarTitles.value));
 }
 .flex-container {
   display: flex;
+  align-items: stretch;
+  width: 100%; 
+  justify-content: space-between; 
+}
+
+.flex-container > * {
+  flex: 1; 
 }
 
 .content-width {
   width: auto;
+  height: auto;
   min-width: 200px; /* Adjust this value according to your needs */
 }
+
+.full-width {
+  width: 100%;
+}
+
 </style>
 
 
