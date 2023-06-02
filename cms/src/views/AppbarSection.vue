@@ -1,62 +1,3 @@
-<!-- <template>
-  <div class="flex-container">
-    <v-sheet 
-      class="mt-14"
-      width="400" 
-      :elevation="6"
-      color="#F8F8FF"
-    >
-      <v-form @submit.prevent>
-        <v-text-field
-          v-for="(title, index) in appbarTitles"
-            :key="index"
-            v-model="appbarTitles[index]"
-            :label="title"
-        ></v-text-field>
-
-        <v-btn type="submit" @click="editTitles" :color="editColor" block class="mt-2 custom-button">
-          Edit
-          <v-icon right>{{ editIcon }}</v-icon>
-        </v-btn>
-      </v-form>
-    </v-sheet>
-
-    <v-sheet 
-    class="mt-14 ml-16 content-width"
-    :elevation="6"
-    color="#F8F8FF"
-  >
-    <v-checkbox
-      v-for="(title, index) in appbarTitleArray"
-      v-model="checkboxStates[index]"
-      :label="title"
-      color="#26547C"
-      :key="'checkbox-' + index"
-    ></v-checkbox>
-    <v-btn type="submit" @click="deleteTitles" :color="deleteColor" block class="mt-2 custom-button">
-      Delete
-      <v-icon right>{{ deleteIcon }}</v-icon>
-    </v-btn>
-  </v-sheet>
-  </div>
-  <v-sheet 
-  class="mt-14"
-      :elevation="6"
-      color="#F8F8FF"
-    >
-    <v-form @submit.prevent>
-        <v-text-field
-          v-model="addTitleValue"
-          label="Add Title"
-        ></v-text-field>
-        <v-btn type="submit" @click="addTitle" :color="addColor" block class="mt-2 custom-button">
-          Add Title
-          <v-icon right>{{ addIcon }}</v-icon>
-        </v-btn>
-      </v-form>
-    </v-sheet>
-</template> -->
-
 <template>
   <div class="d-flex flex-column align-center justify-center">
     <div class="d-flex justify-center align-center">
@@ -254,7 +195,7 @@ const appbarTitleKeys = computed(() => Object.keys(appbarTitles.value));
 
 <style scoped>
 .custom-button {
-  color: white; /* Change this to your desired color */
+  color: white; 
 }
 .flex-container {
   display: flex;
