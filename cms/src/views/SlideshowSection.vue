@@ -18,9 +18,10 @@
                                 ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-btn type="submit" color="#26547C" @click="addSlide" block class="mt-2 custom-button">
+                    <v-btn type="submit" @click="addSlide" :color="editColor1" block class="mt-2 custom-button">
                         Add Slide
-                    </v-btn>
+                <v-icon right>{{ editIcon1 }}</v-icon>
+            </v-btn>
                 </v-container>
             </v-form>
         </v-sheet>
@@ -63,6 +64,10 @@
         </v-list-item-group>
             </v-col>
         </v-row>
+        <v-btn type="submit" @click="saveChanges" :color="editColor2" block class="mt-2 custom-button">
+                Save Changes
+                <v-icon right>{{ editIcon2 }}</v-icon>
+        </v-btn>
     </v-container>
 </v-sheet>
 
@@ -74,11 +79,17 @@
 
 <script setup>
 import { ref, onMounted} from 'vue'
-import { getSection, addSection, deleteSection } from '../API/endpoints.js'
+import { getSection, addSection, deleteSection, patchSection } from '../API/endpoints.js'
 
 const newSlide = ref('')
 const slides = ref([])
 const editingIndex = ref(null) // Track index of slide being edited
+
+const editColor1 = ref('#26547C');
+const editIcon1 = ref('');
+
+const editColor2 = ref('#26547C');
+const editIcon2 = ref('');
 
 onMounted(async () => {
     const data = await getSection('slideshow')
@@ -102,18 +113,32 @@ const addSlide = async () => {
     };
 
     console.log("data", data)
+    try{
+        await addSection('homepageSections/slideshow', data)
+        editColor1.value = '#4CAF50';
+        editIcon1.value = 'mdi-check';
 
-    await addSection('homepageSections/slideshow', data)
+        newSlide.value = ''
 
-    newSlide.value = ''
+        const newData = await getSection('slideshow')
+        slides.value = newData
+    } catch (error) {
+        editColor1.value = '#FF0000';
+        editIcon1.value = 'mdi-close';
+    }
+    setTimeout(() => {
+    editColor1.value = '#26547C';
+    editIcon1.value = '';
+    }, 2000);
+    
 
-    const newData = await getSection('slideshow')
-    slides.value = newData
+    
 }
 
 const deleteSlide = async (index) => {
-    slides.value.splice(index, 1)
-    await deleteSection('homepageSections/slideshow', {slides: slides.value})
+    console.log("delete slide index", index)
+    const endpoint = `homepageSections/slideshow.${index}`
+    await deleteSection(endpoint)
 
     const data = await getSection('slideshow')
     slides.value = data
@@ -123,12 +148,26 @@ const editSlide = (index) => {
     editingIndex.value = index
 }
 
-const saveSlide = async (index) => {
-    await addSection('homepageSections/slideshow', {slides: slides.value})
-    editingIndex.value = null // Exit editing mode
+const saveChanges = async () => {
 
-    const data = await getSection('slideshow')
-    slides.value = data
+    console.log("slides", slides.value)
+    try{
+        await patchSection('slideshow', slides.value)
+        editingIndex.value = null // Exit editing mode
+        editColor2.value = '#4CAF50';
+        editIcon2.value = 'mdi-check';
+
+        const data = await getSection('slideshow')
+        slides.value = data
+    }catch(error){
+        editColor2.value = '#FF0000';
+        editIcon2.value = 'mdi-close';
+    }
+    setTimeout(() => {
+    editColor2.value = '#26547C';
+    editIcon2.value = '';
+    }, 2000);
+    
 }
 
 </script>

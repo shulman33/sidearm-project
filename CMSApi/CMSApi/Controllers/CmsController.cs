@@ -1,4 +1,5 @@
-﻿using CMSApi.Models;
+﻿using System.Text.Json;
+using CMSApi.Models;
 using CMSApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -72,6 +73,8 @@ namespace CMSApi.Controllers
             return NoContent();
         }
 
+
+
         [HttpPut("{id:length(24)}/{documentName}/{fieldName}")]
         public async Task<IActionResult> UpdateSpecificField(string id, string documentName, string fieldName, [FromBody] Dictionary<string, string> newValues)
         {
@@ -87,21 +90,30 @@ namespace CMSApi.Controllers
             return NoContent();
         }
 
-
-
         [HttpPatch("{id:length(24)}/{documentName}/{fieldName}")]
-        public async Task<IActionResult> UpdateSpecificField(string id, string documentName, string fieldName, [FromBody] string newValue)
+        public async Task<IActionResult> UpdateSpecificField(string id, string documentName, string fieldName, [FromBody] JsonElement newValue)
         {
-            var client = await _cmsService.GetAsync(id);
-
-            if (client is null)
+            Console.WriteLine(newValue);
+            BsonValue bsonValue;
+            try
             {
-                return NotFound();
+                bsonValue = BsonDocument.Parse(newValue.GetRawText());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            var bsonValue = BsonValue.Create(newValue);
-            await _cmsService.UpdateSpecificFieldAsync(id, documentName, fieldName, bsonValue);
+            try
+            {
+                await _cmsService.PatchFieldAsync(id, documentName, fieldName, bsonValue);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 
+            // (HTTP 204)
             return NoContent();
         }
 

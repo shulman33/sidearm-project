@@ -49,7 +49,7 @@ namespace CMSApi.Services
                     return client?.homepageSections.bottomBanner;
                 case "slideshow":
                     return client?.homepageSections.slideShow;
-                case "secondary_banner":
+                case "secondary-banner":
                     return client?.homepageSections.secondaryBanner;
                 case "footer":
                     return client?.homepageSections.footer;
@@ -58,11 +58,13 @@ namespace CMSApi.Services
             }
         }
 
-        public async Task UpdateSpecificFieldAsync(string id, string documentName, string fieldName, BsonValue newValue)
+        public async Task PatchFieldAsync(string id, string documentName, string fieldName, [FromBody] BsonValue newValue)
         {
             var updateDefinition = Builders<Client>.Update.Set($"{documentName}.{fieldName}", newValue);
             await _cmsCollection.UpdateOneAsync(x => x.Id == id, updateDefinition);
         }
+
+       
 
         public async Task UpdateSpecificFieldAsync(string id, string documentName, string fieldName, [FromBody] Dictionary<string, string> newValues)
         {

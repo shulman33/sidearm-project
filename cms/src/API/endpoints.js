@@ -28,3 +28,10 @@ export const deleteSection = async (section) => {
     console.log(response.data);
     return response.data;
 }
+
+export const patchSection = async (section, value) => {
+    const endpoint = 'https://localhost:7182/api/Cms/6467d423dbfa9690dcb2ae2a/homepageSections/'
+    const response = await axios.patch(endpoint + section, value)
+    console.log(response.data);
+    return response.data;
+}

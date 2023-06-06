@@ -38,7 +38,7 @@ namespace CMSApi.Models
         
         public SecondaryBanner secondaryBanner { get; set; }
 
-        public Footer footer { get; set; }
+        public Dictionary<string, string> footer { get; set; }
     }
 
     public class AppBar
@@ -86,13 +86,6 @@ namespace CMSApi.Models
         [BsonElement("primary_title")]
         public string primaryTitle { get; set; } = null!;
 
-        //public Entry entry1 { get; set; }
-        //public Entry entry2 { get; set; }
-        //public Entry entry3 { get; set; }
-        //public Entry entry4 { get; set; }
-        //public Entry entry5 { get; set; }
-        //public Entry entry6 { get; set; }
-
         public List<Entry> entries { get; set; }
 
     }
@@ -120,12 +113,6 @@ namespace CMSApi.Models
 
     }
 
-    public class Footer
-    {
-        public Links links { get; set; }
-        public string image { get; set; } = null!;
-
-    }
 
     public class Links
     {

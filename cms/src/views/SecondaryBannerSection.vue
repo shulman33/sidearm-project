@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, onMounted} from 'vue'
-import { getSection, addSection} from '../API/endpoints.js'
+import { getSection, patchSection} from '../API/endpoints.js'
 
 
 const tiles = ref([])
@@ -48,7 +48,7 @@ const editColor = ref('#26547C');
 const editIcon = ref('');
 
 onMounted(async () => {
-    const data = await getSection('secondary_banner')
+    const data = await getSection('secondary-banner')
     console.log(data)
     tiles.value = data
     console.log(tiles.value)
@@ -58,8 +58,8 @@ const editTiles = async () => {
     const data = tiles.value
     console.log("data", data)
     try{
-        await addSection('homepageSection/secondaryBanner', data)
-        editColor.value = '#26547C'
+        await patchSection('secondaryBanner', data)
+        editColor.value = '#4CAF50'
         editIcon.value = 'mdi-check'
     }catch (err) {
         editColor.value = '#FF3333';
