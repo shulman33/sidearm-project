@@ -1,76 +1,57 @@
 <template>
-    <v-card>
+  <v-app-bar
+        color="#26547C"
+        prominent
+      >
+        <v-app-bar-nav-icon color="white" variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-layout>
-        
-        <v-app-bar 
-          color="#26547C"           
-        >
-            <v-app-bar-nav-icon 
-              variant="text" 
-              @click.stop="drawer = !drawer"
-            ></v-app-bar-nav-icon>
+        <v-toolbar-title style="color: white">YU CMS</v-toolbar-title>
 
-            <v-toolbar-title style="color: #FFFFFF;">YU CMS</v-toolbar-title>
-        </v-app-bar>
-        
-        <v-navigation-drawer
-          v-model="drawer"
-          temporary
-          style="background-color: #26547C;"
-        >
-          <v-list-item
-            title="Home Page Sections"
-            style="color: white;"
-          ></v-list-item>
+        <v-spacer></v-spacer>
+
+        <v-btn variant="text" color="white" icon="mdi-magnify"></v-btn>
+
+        <v-btn variant="text" color="white" icon="mdi-filter"></v-btn>
+
+        <v-btn variant="text" color="white" icon="mdi-dots-vertical"></v-btn>
+      </v-app-bar>
+    <v-navigation-drawer
+    v-model="drawer"
+      color="#26547C"
+      theme="dark"
+    >
+      <v-list nav>
+        <v-list-item v-for="(option, index) in options" 
+                :key="index" 
+                @click="navigateTo(option)"
+                style="color: #FCFCFC;">{{ option }}</v-list-item>
+      </v-list>
+
+    </v-navigation-drawer>
+</template>
   
-          <v-divider></v-divider>
-  
-          <v-list density="compact" nav>
-            <v-list-item 
-              v-for="(option, index) in options" 
-                  :key="index" 
-                  @click="navigateTo(option)"
-                  style="color: #FCFCFC;"
-                  >
-                  {{ option }}
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
-        <v-main style="height: 100vh; background-color: #FCFCFC;">
-          <div class="d-flex justify-center align-center w-100 h-100">
-            <slot>
+<script setup>
+  import { ref, reactive } from 'vue'
+  import { useRouter } from 'vue-router'
 
-            </slot>
-          </div>
-        </v-main>
-      </v-layout>
-    </v-card>
-  </template>
-  
-  <script setup>
-    import { ref, reactive } from 'vue'
-    import { useRouter } from 'vue-router'
+  const imageurl = "data:image/jpeg;base64,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"
 
-    const router = useRouter()
-    const drawer = ref(false)
-
-    const navigateTo = (option) => {
-      const routeName = option.toLowerCase().replace(' ', '-')
-      router.push(`/${routeName}`)
-    }
+  const router = useRouter()
   
-    const options = reactive([
-      "App Bar", 
-      "Main",
-      "Headlines", 
-      "Bottom Banner", 
-      "Slideshow", 
-      "Secondary Banner",
-      "Footer"
-    ])
-  
-  </script>
+  let drawer = ref(true) // drawer state
 
+  const navigateTo = (option) => {
+    const routeName = option.toLowerCase().replace(' ', '-')
+    router.push(`/${routeName}`)
+  }
 
-  
+  const options = reactive([
+    "App Bar", 
+    "Main",
+    "Headlines", 
+    "Bottom Banner", 
+    "Slideshow", 
+    "Secondary Banner",
+    "Footer"
+  ])
+</script>
